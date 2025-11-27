@@ -56,6 +56,14 @@ controller.retrieveAll = async function(req, res) {
     // HTTP 500: Internal Server Error
     res.status(500).end()
   }
+
+/*
+Vulnerabilidade: API3:2023 - Falha de autenticação a nível de propriedade
+Esta vulnerabilidade foi evitada no código ao utilizar a propriedade omit do prisma 
+para excluir o campo sensível password do retorno da API, prevenindo a 
+exposição excessiva de dados e foi assim que no dia 08/10 conseguimos remover a vunerabilidade
+de autenticação fixa.
+*/
 }
 
 controller.retrieveOne = async function(req, res) {
@@ -132,7 +140,16 @@ controller.delete = async function(req, res) {
 
      // Somente usuários administradores podem acessar este recurso
     // HTTP 403: Forbidden(
+
     if(! req?.authUser?.is_admin) return res.status(403).end()
+
+/*
+Vulnerabilidade: API5:2023 - Falha de autenticação a nível de função
+Esta vulnerabilidade foi evitada ao implementar uma verificação privilégios
+is_admin. O código que ajustamos no dia 22/10 bloqueia o acesso a funções administrativas sensíveis, como a
+exclusão de usuários, garantindo que apenas administradores autenticados possam
+executar essa operação crítica.
+*/
 
     await prisma.user.delete({
       where: { id: Number(req.params.id) }

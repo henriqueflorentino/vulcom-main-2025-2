@@ -81,4 +81,12 @@ export default function(req, res, next) {
     // Token verificado e validado, passamos ao próximo middleware
     next()  
   })
+
+/*
+Vulnerabilidade: API2:2023 - Falha de autenticação
+Esta vulnerabilidade foi evitada ao implementar a verificação criptográfica do token JWT
+jwt.verify neste middleware. Isso garante que requisições forjadas ou com
+tokens expirados/adulterados sejam rejeitadas antes de chegarem aos controllers, onde conseguimos
+ajustar isso no dia 18/10.
+*/
 }

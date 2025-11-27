@@ -30,7 +30,15 @@ const limiter = rateLimit({
  limit: 20               // Máximo de 20 requisições
 })
 
-
+/*
+Vulnerabilidade: API4:2023 - Consumo irrestrito de recursos
+Esta vulnerabilidade foi evitada no código ao implementar o middleware express-rate-limit, 
+que restringe o número de requisições por IP (20 por minuto), protegendo a API contra 
+ataques de Negação de Serviço (DoS) e força bruta. Com essa implementação que fizemos no
+dia 29/10 o back-end passou a retornar o erro HTTP 429: Too Many Requests, 
+indicando que aquela tentativa de ataque de força bruta sequer chegou a ser processada, fazendo com que 
+o atacante perca tempo enviando várias senhas que não serão testadas.
+*/
 app.use(limiter)
 
 
